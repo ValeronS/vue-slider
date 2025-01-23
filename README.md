@@ -1,0 +1,1 @@
+Для работы tailwindcss установлены дев зависимости postcss и autoprefixer

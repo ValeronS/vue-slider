@@ -1,0 +1,8 @@
+:root {
+    --color-background-blue: #F4F5FF;
+    --color-border-gray: #B2B0C0;
+}
+
+.swiper {
+    --swiper-theme-color: #FE9539;
+}
