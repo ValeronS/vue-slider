@@ -30,3 +30,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+h1 {
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 29px;
+}
+
+.text-ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+button {
+  padding: 4px 8px;
+  border: 1px solid gray;
+  border-radius: 4px;
+}

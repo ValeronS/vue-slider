@@ -8,11 +8,13 @@ const colors = {
     gray: 'var(--color-border-gray)',
   },
 }
+
 export default {
   content: ['./index.html', './src/**/*.{css,vue,js,ts}'],
   theme: {
-    extend: {},
-    colors,
+    extend: {
+      colors,
+    },
   },
   plugins: [],
 }
