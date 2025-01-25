@@ -5,3 +5,7 @@ export interface Slide {
   image: string
   user: string
 }
+
+export interface FetchSlidesOptions {
+  shouldFail?: boolean
+}

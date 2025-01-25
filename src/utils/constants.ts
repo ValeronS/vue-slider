@@ -5,6 +5,7 @@ export enum EMessageType {
   SLIDES_UPDATED = 'SLIDES_UPDATED',
   SAVE_SLIDES = 'SAVE_SLIDES',
   RESET_SLIDES = 'RESET_SLIDES',
+  FAIL_SLIDES = 'GET_ERROR',
 }
 
 export const mockSlides: Slide[] = [

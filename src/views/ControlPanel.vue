@@ -3,6 +3,7 @@ import { useSlidesStore } from '@/stores/slidesStore.ts'
 import { storeToRefs } from 'pinia'
 import { useIframeMessaging } from '@/composables/useIframeMessaging.ts'
 import { EMessageType } from '@/utils/constants.ts'
+import type { FetchSlidesOptions } from '@/services/model.ts'
 
 const slidesStore = useSlidesStore()
 const { slides } = storeToRefs(slidesStore)
@@ -25,9 +26,9 @@ const handleSave = () => {
 }
 
 // Сброс изменений
-const handleReset = () => {
+const handleReset = (options?: FetchSlidesOptions) => {
   window.parent.postMessage({
-    type: EMessageType.RESET_SLIDES,
+    type: options?.shouldFail ? EMessageType.FAIL_SLIDES : EMessageType.RESET_SLIDES,
   })
 }
 
@@ -40,11 +41,12 @@ useIframeMessaging()
     <h1 class="p-2 text-center bg-slate-200">{{ `Панель управления(${origin})` }}</h1>
 
     <div class="flex justify-end gap-2 p-2">
-      <button @click="handleSave">Сохранить изменения на сервер</button>
-      <button @click="handleReset">Получить данные от сервера</button>
+      <button v-if="slides?.length" @click="handleSave">Сохранить изменения на сервер</button>
+      <button @click="handleReset()">Получить данные от сервера</button>
+      <button @click="handleReset({ shouldFail: true })">Получить ошибку от сервера</button>
     </div>
 
-    <div class="grid grid-cols-[auto_1fr] gap-2 p-2">
+    <div v-if="slides?.length" class="grid grid-cols-[auto_1fr] gap-2 p-2">
       <template v-for="(slide, index) in slides" :key="index">
         <span class="">Отзыв # {{ index + 1 }}</span>
 

@@ -1,21 +1,27 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { SlidesService } from '@/services/slidesService.ts'
-import type { Slide } from '@/services/model.ts'
+import type { FetchSlidesOptions, Slide } from '@/services/model.ts'
+import { useNotificationStore } from '@/stores/notificationStore.ts'
 
 export const useSlidesStore = defineStore('slides', () => {
+  const notification = useNotificationStore()
+
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
   const slides = ref<Slide[]>([])
 
-  const fetchSlides = async () => {
+  const fetchSlides = async (options?: FetchSlidesOptions) => {
     try {
+      if (error.value) error.value = null
       isLoading.value = true
-      slides.value = await SlidesService.fetchSlides()
+      slides.value = await SlidesService.fetchSlides(options)
     } catch (err) {
       console.error('err', err)
-      error.value = err instanceof Error ? err.message : 'Failed to load slides'
+      error.value = err instanceof Error ? err.message : 'Ошибка получения данных'
+      notification.error(error.value)
+      slides.value = []
     } finally {
       isLoading.value = false
     }
@@ -33,9 +39,11 @@ export const useSlidesStore = defineStore('slides', () => {
     try {
       isLoading.value = true
       slides.value = await SlidesService.updateSlides(slides.value)
+      notification.success('Слайды успешно сохранены')
     } catch (err) {
       console.error('err', err)
       error.value = err instanceof Error ? err.message : 'Failed to update slide'
+      notification.error(error.value)
     } finally {
       isLoading.value = false
     }

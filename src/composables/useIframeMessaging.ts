@@ -34,6 +34,12 @@ export const useIframeMessaging = () => {
         break
       }
 
+      // Получение ошибки сервера
+      case EMessageType.FAIL_SLIDES: {
+        await slidesStore.fetchSlides({ shouldFail: true })
+        break
+      }
+
       default:
         break
     }
