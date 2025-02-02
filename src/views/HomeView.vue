@@ -12,17 +12,17 @@ onMounted(async () => await slidesStore.fetchSlides())
 
 // после получения слайдов от бэка отправляем их в дочерний экземпляр приложения
 const iframeRef = ref<HTMLIFrameElement>()
+const getSlidesFromParent = () => {
+  const rawSlides = JSON.parse(JSON.stringify(slidesStore.slides))
+  iframeRef.value?.contentWindow?.postMessage(
+    { type: EMessageType.SLIDES_UPDATED, payload: rawSlides },
+    window.location.origin,
+  )
+}
+
 watch(
   () => slidesStore.slides,
-  (slides) => {
-    const rawSlides = JSON.parse(JSON.stringify(slides))
-
-    iframeRef.value?.contentWindow?.postMessage(
-      { type: EMessageType.SLIDES_UPDATED, payload: rawSlides },
-      window.location.origin,
-    )
-  },
-  { deep: true },
+  () => getSlidesFromParent(),
 )
 
 // Обработка сообщений от дочернего экземпляра приложения
@@ -33,6 +33,11 @@ useIframeMessaging()
   <main>
     <carousel-block class="min-h-[302px]" />
 
-    <iframe ref="iframeRef" src="/control-panel" class="w-full h-[calc(100vh-302px)]" />
+    <iframe
+      ref="iframeRef"
+      src="/control-panel"
+      class="w-full h-[calc(100vh-302px)]"
+      @load="getSlidesFromParent"
+    />
   </main>
 </template>
